@@ -14,11 +14,11 @@ public with sharing class TourService {
         List<ExcursionType__c> excursionTypesList = queryExcursionTypesByIdsAndDateInterval(excursionTypeIds, startDate, endDate);
 
         for(ExcursionType__c excursionType : excursionTypesList) {
-            Set<DateUtils.WeekDay> dayNumbersToCreateTours = new Set<DateUtils.WeekDay>();
+            Set<DateUtils.WeekDay> weekDaysToCreateTours = new Set<DateUtils.WeekDay>();
             Set<Date> existingTourDates = new Set<Date>();
 
             for(String day : excursionType.DaysOfWeek__c.split(';')) {
-                dayNumbersToCreateTours.add(DateUtils.getDayOfWeekByStringDay(day));
+                weekDaysToCreateTours.add(DateUtils.getDayOfWeekByStringDay(day));
             }
             
             for(Tour__c tour : excursionType.Tours__r) {
@@ -27,8 +27,8 @@ public with sharing class TourService {
 
             Date dateIterator = startDate;
             while(dateIterator <= endDate) {
-                DateUtils.WeekDay currentDayNumber = DateUtils.getDayOfWeek(dateIterator);
-                if(dayNumbersToCreateTours.contains(currentDayNumber) && !existingTourDates.contains(dateIterator)) {
+                DateUtils.WeekDay currentWeekDay = DateUtils.getDayOfWeek(dateIterator);
+                if(weekDaysToCreateTours.contains(currentWeekDay) && !existingTourDates.contains(dateIterator)) {
                     Tour__c tour = createTourRecord(excursionType, dateIterator);
                     toursToInsert.add(tour);
                 }

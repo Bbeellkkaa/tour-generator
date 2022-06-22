@@ -21,8 +21,13 @@ public inherited sharing class DateUtils {
     }
 
     public static WeekDay getDayOfWeek(Date dateValue) {
-        Integer dayNumber = Math.mod(MONDAY_DATE.daysBetween(dateValue) , 7);
-        return WeekDay.values()[dayNumber];
+        WeekDay result = null;
+        if(dateValue != null) {
+            Integer dayNumber = Math.mod(MONDAY_DATE.daysBetween(dateValue) , 7);
+            result = WeekDay.values()[dayNumber];
+        }
+
+        return result;
     }
 
     public class IncorrectStringDayException extends Exception {}
